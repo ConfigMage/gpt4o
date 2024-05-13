@@ -1,9 +1,8 @@
 import streamlit as st
 import openai
-import os
 
-# Set up OpenAI API key from environment variables
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Set up OpenAI API key from Streamlit secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Streamlit app
 st.set_page_config(page_title="GPT Assistant Interface", page_icon="🤖")
@@ -20,14 +19,14 @@ if st.button("Get Response"):
         with st.spinner('Getting response...'):
             try:
                 # Call the OpenAI API with the prompt
-                client = openai.OpenAI(api_key=os.environ['OPENAI_API_KEY'])
+                client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
                 response = client.chat.completions.create(
                     model="gpt-4",
                     messages=[
                         {"role": "system", "content": "You are a helpful assistant."},
                         {"role": "user", "content": prompt}
                     ],
-                    max_tokens=500
+                    max_tokens=150
                 )
                 # Display the response
                 st.success("Response received:")
