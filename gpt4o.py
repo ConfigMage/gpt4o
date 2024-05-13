@@ -11,9 +11,9 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 assistant_id = os.getenv("GPT_ASSISTANT_ID")
 
 # Streamlit app
-st.set_page_config(page_title="GPT Assistant Interface", page_icon="🤖")
+st.set_page_config(page_title="Family Assistant", page_icon="🤖")
 
-st.title("GPT Assistant Interface")
+st.title("Reginald is here to help")
 st.write("Enter a prompt and get a response from your GPT model:")
 
 # Input prompt
