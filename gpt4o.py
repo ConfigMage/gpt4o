@@ -1,8 +1,9 @@
 import streamlit as st
 import openai
 
-# Set up OpenAI API key from Streamlit secrets
+# Set up OpenAI API key and assistant ID from Streamlit secrets
 openai.api_key = st.secrets["OPENAI_API_KEY"]
+assistant_id = st.secrets["GPT_ASSISTANT_ID"]
 
 # Streamlit app
 st.set_page_config(page_title="GPT Assistant Interface", page_icon="🤖")
