@@ -1,36 +1,39 @@
 import streamlit as st
 import openai
-import logging
 
-# Set up logging
-logging.basicConfig(level=logging.DEBUG)
-
-# Your API key
+# Set up OpenAI API key from Streamlit secrets
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-# Function to get GPT response using GPT-4
-def get_gpt_response(prompt):
-    try:
-        response = openai.Completion.create(
-            engine="gpt-4",  # Use "gpt-4" for the GPT-4 model
-            prompt=prompt,
-            max_tokens=150,
-            temperature=0.7,
-            stop=None
-        )
-        logging.info("GPT-4 response received successfully")
-        return response.choices[0].text.strip()
-    except Exception as e:
-        logging.error(f"Error getting GPT-4 response: {e}")
-        return "There was an error getting the response."
+# Streamlit app
+st.set_page_config(page_title="GPT Assistant Interface", page_icon="🤖")
 
-# Streamlit app setup
-st.title("Family GPT Assistant")
+st.title("GPT Assistant Interface")
+st.write("Enter a prompt and get a response from your GPT model:")
 
-# User input
-user_input = st.text_input("Ask a question:")
-if user_input:
-    # Construct the prompt with the same context and formatting as used in the Playground
-    prompt = f"Family members: Ada Solario, Bucky Solario, Mando Solario, Kayla Solario, Savanah Solario, Marj Stice, Nichole Payne, Sheree Solario, Chris Solario.\n\n{user_input}"
-    response = get_gpt_response(prompt)
-    st.write(response)
+# Input prompt
+prompt = st.text_area("Prompt", "", height=150, help="Type your prompt here")
+
+# When the "Get Response" button is pressed
+if st.button("Get Response"):
+    if prompt:
+        with st.spinner('Getting response...'):
+            try:
+                # Call the OpenAI API with the prompt
+                client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+                response = client.chat.completions.create(
+                    model="gpt-4",
+                    messages=[
+                        {"role": "system", "content": "You are a helpful assistant."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    max_tokens=150
+                )
+                # Display the response
+                st.success("Response received:")
+                st.write(response.choices[0].message.content)
+            except Exception as e:
+                st.error(f"Error: {e}")
+    else:
+        st.warning("Please enter a prompt.")
+
+st.write("Note: Make sure your API key and assistant ID are set in your environment variables.")
