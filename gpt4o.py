@@ -6,8 +6,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 # Your API key
-api_key = "your-api-key"
-openai.api_key = api_key
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Function to get GPT response using GPT-4
 def get_gpt_response(prompt):
